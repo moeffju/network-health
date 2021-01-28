@@ -9,3 +9,8 @@ scrape_configs:
     scrape_timeout: 2s
     static_configs:
     - targets: ['pinger:8080']
+  - job_name: 'speedtest'
+    scrape_interval: 15m
+    scrape_timeout: 3m
+    static_configs:
+    - targets: ['prometheusspeedtest:9516']

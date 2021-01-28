@@ -50,6 +50,15 @@ services:
         target: /prometheus
     user: 0:0
 
+  prometheus_speedtest:
+    image: moeffju/prometheus_speedtest_plusplus:latest
+    container_name: prometheusspeedtest
+    restart: always
+    ports:
+      - 9516:9516
+    networks:
+      - pinger-net
+
   pinger:
     image: nefilim/pinger:1.0
     container_name: pinger
