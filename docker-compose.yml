@@ -6,6 +6,10 @@ services:
     restart: always
     ports:
       - 3000:3000
+    environment:
+      GF_RENDERING_SERVER_URL: http://renderer:8081/render
+      GF_RENDERING_CALLBACK_URL: http://grafana:3000/
+      GF_LOG_FILTERS: rendering:debug
     networks:
       - pinger-net
     volumes:
@@ -16,6 +20,15 @@ services:
         source: ./prometheus-datasource.yml
         target: /etc/grafana/provisioning/datasources/prometheus.yml
 
+  renderer:
+    image: grafana/grafana-image-renderer
+    ports:
+      - 8081
+    environment:
+      ENABLE_METRICS: 'true'
+    networks:
+      - pinger-net
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -24,7 +37,7 @@ services:
       - 9090:9090
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.retention=7d'
+      - '--storage.tsdb.retention=30d'
       - '--storage.tsdb.path=/prometheus'
     networks:
       - pinger-net
